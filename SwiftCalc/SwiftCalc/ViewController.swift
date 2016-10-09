@@ -223,7 +223,7 @@ class ViewController: UIViewController {
                 } else {
                     print(firstNumberString)
                     print(secondNumberString)
-                    if (operation == "*" || operation == "/") {
+                    if (/*operation == "*" || */operation == "/") {
                         if (Int(firstNumberString)! % Int(secondNumberString)! != 0) {
                             doubleResult = calculate(a:firstNumberString, b:secondNumberString, operation:operation)
                             print(doubleResult)
@@ -231,13 +231,19 @@ class ViewController: UIViewController {
                             firstNumberString = String(doubleResult)
                             secondNumberString = ""
                         }
+                    } else {
+                        intResult = intCalculate(a:Int(firstNumberString)!, b:Int(secondNumberString)!, operation:operation)
+                        print(intResult)
+                        updateResultLabel(String(intResult))
+                        firstNumberString = String(intResult)
+                        secondNumberString = ""
                     }
-                    //if secondNumberString != ""
+                   /* //if secondNumberString != ""
                     intResult = intCalculate(a:Int(firstNumberString)!, b:Int(secondNumberString)!, operation:operation)
                     print(intResult)
                     updateResultLabel(String(intResult))
                     firstNumberString = String(intResult)
-                    secondNumberString = ""
+                    secondNumberString = ""*/
 
 
                 }
