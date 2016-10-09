@@ -168,6 +168,12 @@ class ViewController: UIViewController {
                         updateResultLabel(String(doubleResult))
                         firstNumberString = String(doubleResult)
                         secondNumberString = ""
+                    } else {
+                        intResult = intCalculate(a:Int(firstNumberString)!,  b:Int(secondNumberString)!, operation:operation)
+                        print(intResult)
+                        updateResultLabel(String(intResult))
+                        firstNumberString = String(intResult)
+                        secondNumberString = ""
                     }
                 } else {
                     intResult = intCalculate(a:Int(firstNumberString)!,  b:Int(secondNumberString)!, operation:operation)
