@@ -21,7 +21,19 @@ class ViewController: UIViewController {
     
     // TODO: This looks like a good place to add some data structures.
     //       One data structure is initialized below for reference.
-    var someDataStructure: [String] = [""]
+    var operation = ""
+    var isTypingNumber = false
+    var firstNumberString = ""
+    var secondNumberString = ""
+    var enteredButtons: [String] = []
+    var newOperation = true
+    var middleOfOperation = false
+    var containsDecimal = false
+    var toReturn = ""
+    var intResult = 0
+    var doubleResult = 0.0
+    var newCalc = true
+    var numberCount = 0
     
 
     override func viewDidLoad() {
@@ -47,12 +59,24 @@ class ViewController: UIViewController {
     //       Modify this one or create your own.
     func updateSomeDataStructure(_ content: String) {
         print("Update me like one of those PCs")
+        if newOperation {
+            enteredButtons = []
+            //enteredButtons[0] = Int(content)!
+        } else {
+            //enteredButtons[1] = Int(content)!
+        }
     }
     
     // TODO: Ensure that resultLabel gets updated.
     //       Modify this one or create your own.
     func updateResultLabel(_ content: String) {
         print("Update me like one of those PCs")
+        if isTypingNumber {
+            resultLabel.text = resultLabel.text! + content
+        } else {
+            resultLabel.text = content
+            isTypingNumber = true
+        }
     }
     
     
@@ -66,14 +90,38 @@ class ViewController: UIViewController {
     //       Modify this one or create your own.
     func intCalculate(a: Int, b:Int, operation: String) -> Int {
         print("Calculation requested for \(a) \(operation) \(b)")
-        return 0
+        
+        if (operation == "+") {
+            intResult = a + b
+           
+        } else if (operation == "-") {
+            intResult = a - b
+            
+        } else if (operation == "*") {
+            
+            intResult = a * b
+            
+        } else if (operation == "/") {
+            intResult = a/b
+            
+        }
+        return intResult
     }
     
     // TODO: A general calculate method for doubles
     //       Modify this one or create your own.
     func calculate(a: String, b:String, operation: String) -> Double {
         print("Calculation requested for \(a) \(operation) \(b)")
-        return 0.0
+        if (operation == "+") {
+            doubleResult = Double(a)! + Double(b)!
+        } else if (operation == "-") {
+            doubleResult = Double(a)! - Double(b)!
+        } else if (operation == "*") {
+            doubleResult = Double(a)! * Double(b)!
+        } else if (operation == "/") {
+            doubleResult = Double(a)! / Double(b)!
+        }
+        return doubleResult
     }
     
     // REQUIRED: The responder to a number button being pressed.
@@ -81,16 +129,146 @@ class ViewController: UIViewController {
         guard Int(sender.content) != nil else { return }
         print("The number \(sender.content) was pressed")
         // Fill me in!
+        if (numberCount < 7) {
+            let number = sender.currentTitle
+            updateResultLabel(number!)
+            
+            isTypingNumber = true
+            numberCount += 1
+            
+        }
+        
     }
     
     // REQUIRED: The responder to an operator button being pressed.
     func operatorPressed(_ sender: CustomButton) {
         // Fill me in!
+        print("The operator \(sender.content) was pressed")
+        if (sender.content == "=") {
+            middleOfOperation = false
+            isTypingNumber = false
+            secondNumberString = resultLabel.text!
+            if (firstNumberString.contains(".")) {
+                print(firstNumberString)
+                print(secondNumberString)
+                
+                doubleResult = calculate(a:firstNumberString, b:secondNumberString, operation:operation)
+                print(doubleResult)
+                updateResultLabel(String(doubleResult))
+                firstNumberString = String(doubleResult)
+                secondNumberString = ""
+                
+            } else {
+                print(firstNumberString)
+                print(secondNumberString)
+                if (operation == "*" || operation == "/") {
+                    if (Int(firstNumberString)! % Int(secondNumberString)! != 0) {
+                        doubleResult = calculate(a:firstNumberString, b:secondNumberString, operation:operation)
+                        print(doubleResult)
+                        updateResultLabel(String(doubleResult))
+                        firstNumberString = String(doubleResult)
+                        secondNumberString = ""
+                    }
+                } else {
+                    intResult = intCalculate(a:Int(firstNumberString)!,  b:Int(secondNumberString)!, operation:operation)
+                    print(intResult)
+                    updateResultLabel(String(intResult))
+                    firstNumberString = String(intResult)
+                    secondNumberString = ""
+                }
+            
+            }
+            isTypingNumber = false
+            newCalc = true
+            numberCount = 0
+        } else if (sender.content == "C") {
+            isTypingNumber = false
+            middleOfOperation = false
+            intResult = 0
+            doubleResult = 0.0
+            if (firstNumberString.contains(".")) {
+                updateResultLabel("0.0")
+            } else {
+                updateResultLabel("0")
+            }
+            firstNumberString = resultLabel.text!
+            isTypingNumber = false
+            numberCount = 0
+        } else if (sender.content == "+/-") {
+            isTypingNumber = false
+            if (resultLabel.text!.contains(".")) {
+                var signedDouble = Double(resultLabel.text!)
+                signedDouble! *= -1.0
+                updateResultLabel(String(describing:signedDouble))
+            } else {
+                
+                let signedInt = Int(resultLabel.text!)! * -1
+                updateResultLabel(String(describing:signedInt))
+            }
+            
+            //firstNumberString = resultLabel.text!
+        }
+        else {
+            isTypingNumber = false
+            if (middleOfOperation == true) {
+                secondNumberString = resultLabel.text!
+                if (firstNumberString.contains(".")) {
+                    print(firstNumberString)
+                    print(secondNumberString)
+                    doubleResult = calculate(a:firstNumberString, b:secondNumberString, operation:operation)
+                    print(doubleResult)
+                    updateResultLabel(String(doubleResult))
+                    firstNumberString = String(doubleResult)
+                    secondNumberString = ""
+                } else {
+                    print(firstNumberString)
+                    print(secondNumberString)
+                    if (operation == "*" || operation == "/") {
+                        if (Int(firstNumberString)! % Int(secondNumberString)! != 0) {
+                            doubleResult = calculate(a:firstNumberString, b:secondNumberString, operation:operation)
+                            print(doubleResult)
+                            updateResultLabel(String(doubleResult))
+                            firstNumberString = String(doubleResult)
+                            secondNumberString = ""
+                        }
+                    }
+                    //if secondNumberString != ""
+                    intResult = intCalculate(a:Int(firstNumberString)!, b:Int(secondNumberString)!, operation:operation)
+                    print(intResult)
+                    updateResultLabel(String(intResult))
+                    firstNumberString = String(intResult)
+                    secondNumberString = ""
+
+
+                }
+                isTypingNumber = false
+                operation = sender.content
+            }
+            else {
+                isTypingNumber = false
+                middleOfOperation = true
+                firstNumberString = resultLabel.text!
+                print(firstNumberString)
+                isTypingNumber = false
+                operation = sender.content
+            }
+            numberCount = 0
+        }
+        
+        
+        
     }
     
     // REQUIRED: The responder to a number or operator button being pressed.
     func buttonPressed(_ sender: CustomButton) {
+        print("The button \(sender.content) was pressed")
        // Fill me in!
+        if (sender.content == ".") {
+            updateResultLabel(sender.content)
+            containsDecimal = true;
+        } else if (sender.content == "0") {
+            numberPressed(sender)
+        }
     }
     
     // IMPORTANT: Do NOT change any of the code below.
