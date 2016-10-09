@@ -161,7 +161,7 @@ class ViewController: UIViewController {
             } else {
                 print(firstNumberString)
                 print(secondNumberString)
-                if (operation == "*" || operation == "/") {
+                if (operation == "/") {
                     if (Int(firstNumberString)! % Int(secondNumberString)! != 0) {
                         doubleResult = calculate(a:firstNumberString, b:secondNumberString, operation:operation)
                         print(doubleResult)
