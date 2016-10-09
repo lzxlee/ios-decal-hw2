@@ -188,15 +188,14 @@ class ViewController: UIViewController {
             newCalc = true
             numberCount = 0
         } else if (sender.content == "C") {
+            firstNumberString = resultLabel.text!
             isTypingNumber = false
             middleOfOperation = false
             intResult = 0
             doubleResult = 0.0
-            if (firstNumberString.contains(".")) {
-                updateResultLabel("0.0")
-            } else {
+           
                 updateResultLabel("0")
-            }
+            
             firstNumberString = resultLabel.text!
             isTypingNumber = false
             numberCount = 0
